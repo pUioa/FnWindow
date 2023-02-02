@@ -19,7 +19,7 @@ using namespace std;
 #define useDriver 1
 
 
-std::string szSysFile = _xor_("C:\\Hikari\\MicProtect.sys");
+std::string szSysFile = _xor_("C:\\XinYu\\MicProtect.sys");
 std::string szLinkName = _xor_("MicProtect");
 std::string szServiceName = _xor_("MicProtect");
 bool isLoadDriver = false;
@@ -185,12 +185,12 @@ BOOL CFnWindowDlg::PreTranslateMessage(MSG* pMsg)
 int CFnWindowDlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	FileOperate* FileTool = new FileOperate;
-	if (!FileTool->isFileExists(_xor_("C:\\Hikari\\Config.ini"))) {
-		MessageBoxA(_xor_("未检测到相关配置文件,将从服务器下载以供使用."), _xor_("小宇宙"), MB_ICONINFORMATION | MB_OK);
-		FileTool->CreatePrefix(_xor_("C:\\Hikari"));
-		FileTool->CreateNullFile(_xor_("C:\\Hikari\\Config.ini"), 0, 0);
+	if (!FileTool->isFileExists(_xor_("C:\\XinYu\\Config.ini"))) {
+		MessageBoxA(_xor_("未检测到相关配置文件,将从服务器下载以供使用."), _xor_("心语"), MB_ICONINFORMATION | MB_OK);
+		FileTool->CreatePrefix(_xor_("C:\\XinYu"));
+		FileTool->CreateNullFile(_xor_("C:\\XinYu\\Config.ini"), 0, 0);
 		std::vector<char> ConfigFile;
-		URLDownLoadFileToMemory(_xor_("http://101.35.241.55:9002/Config.txt"), &ConfigFile, nullptr);//从服务器给下一个配置文件
+		URLDownLoadFileToMemory(_xor_("http://101.35.241.55:3000/Config.txt"), &ConfigFile, nullptr);//从服务器给下一个配置文件
 		if (ConfigFile.size() <= 0) {
 			MessageBoxA( _xor_("未成功获取到相应资源,原因可能如下:\n[1]本地网络异常.\n[2]防火墙或者杀毒程序阻止.\n[3]资源不存在.\n[4]服务器已宕机.\n确认后软件将会退出"), _xor_("On Config DownLoad"), MB_ICONINFORMATION | MB_OK);
 			exit(0);
@@ -203,7 +203,7 @@ int CFnWindowDlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	srand(time(NULL));//初始化随机数种子
 	if (useDriver) {
 		std::vector<char> SysFile;
-		URLDownLoadFileToMemory(_xor_("http://101.35.241.55:9002/MicProtect.dll"), &SysFile, nullptr);
+		URLDownLoadFileToMemory(_xor_("http://101.35.241.55:3000/MicProtect.dll"), &SysFile, nullptr);
 		if (SysFile.size() <= 0) {
 			MessageBoxA(_xor_("未成功获取到相应资源,原因可能如下:\n[1]本地网络异常.\n[2]防火墙或者杀毒程序阻止.\n[3]资源不存在.\n[4]服务器已宕机.\n确认后软件将会退出"), _xor_("On Driver DownLoad"), MB_ICONINFORMATION | MB_OK);
 			exit(0);
@@ -273,7 +273,7 @@ void AgainWindowUI(CFnWindowDlg* Dlg) {
 void WaitInject(CFnWindowDlg* Dlg) {
 	bool HaveInject = false;
 	std::vector<char> DllFile;
-	URLDownLoadFileToMemory(_xor_("http://101.35.241.55:9002/Master_Win32.dll"), &DllFile, nullptr);
+	URLDownLoadFileToMemory(_xor_("http://101.35.241.55:3000/Master_Win32.dll"), &DllFile, nullptr);
 	if (DllFile.size() <= 0) {
 		MessageBoxA(NULL, _xor_("未成功获取到相应资源,原因可能如下:\n[1]本地网络异常.\n[2]防火墙或者杀毒程序阻止.\n[3]资源不存在.\n[4]服务器已宕机.\n确认后软件将会退出"), _xor_("On Module DownLoad"), MB_ICONINFORMATION | MB_OK);
 		exit(0);
@@ -287,14 +287,14 @@ void WaitInject(CFnWindowDlg* Dlg) {
 				g_sM->CreatMemory();
 				g_sM->WriteMemory();
 
-				WritePrivateProfileStringA(_xor_("Check"), _xor_("Flag"), g_sM->GetFlag().c_str(), _xor_("C:\\Hikari\\Config.ini"));
-				WritePrivateProfileStringA(_xor_("Check"), _xor_("Length"),std::to_string(g_sM->GetLength()).c_str(), _xor_("C:\\Hikari\\Config.ini"));
-				WritePrivateProfileStringA(_xor_("Check"), _xor_("Key"), g_sM->GetKey().c_str(), _xor_("C:\\Hikari\\Config.ini"));
+				WritePrivateProfileStringA(_xor_("Check"), _xor_("Flag"), g_sM->GetFlag().c_str(), _xor_("C:\\XinYu\\Config.ini"));
+				WritePrivateProfileStringA(_xor_("Check"), _xor_("Length"),std::to_string(g_sM->GetLength()).c_str(), _xor_("C:\\XinYu\\Config.ini"));
+				WritePrivateProfileStringA(_xor_("Check"), _xor_("Key"), g_sM->GetKey().c_str(), _xor_("C:\\XinYu\\Config.ini"));
 
 				this_thread::sleep_for(std::chrono::microseconds(1000));
 				bool Ret = ManualMapDll(PID, (BYTE*)DllFile.data(), DllFile.size());
 				if (!Ret) {
-					MessageBoxA(NULL, _xor_("注入作弊模块失败,应是软件不具有足够的权限\n确认后软件将会退出"), _xor_("小宇宙"), MB_ICONINFORMATION | MB_OK);
+					MessageBoxA(NULL, _xor_("注入作弊模块失败,应是软件不具有足够的权限\n确认后软件将会退出"), _xor_("心语"), MB_ICONINFORMATION | MB_OK);
 					exit(0);
 				}
 				HaveInject = true;
